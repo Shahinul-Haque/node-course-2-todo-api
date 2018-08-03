@@ -17,7 +17,11 @@ const users = [{
 },{
   _id:userTwoId,
   email:'Tuhinitbd@gmail.com',
-  password:'usertwo'
+  password:'usertwo',
+  tokens:[{
+    access:'auth',
+    token: jwt.sign({_id:userTwoId,access:'auth'},'abc123').toString()
+  }]
  
 }]
 
@@ -25,17 +29,19 @@ const todos =[{
     _id:new ObjectID(),
     text:'First test todo',
     completed:false,
-    completedAt:null
+    completedAt:null,
+    _creator:userOneId
 }, {
     _id:new ObjectID(),
     text:'Second test todo',
     completed:true,
-    completeAt:333
+    completeAt:333,
+    _creator:userTwoId
 }];  
 
 
 const populateTodos=function(done) { // dont use arrow function to use this.timeout
-    this.timeout(5000); // override default 2000 ms
+    this.timeout(3000); // override default 2000 ms
   
     Todo.remove({}).then(() => {
       return Todo.insertMany(todos);
